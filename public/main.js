@@ -1,5 +1,6 @@
 const insertForm = document.querySelector('#insert');
 const namesList = document.querySelector('#names');
+const viewsText = document.querySelector('#views');
 
 insertForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
@@ -39,6 +40,9 @@ async function FillNamesList () {
     })
 }
 
+
 (async _ => {
     await FillNamesList();
+    const views = await (await fetch('/getviews/')).json();
+    viewsText.innerHTML = `Views: ${views.views}`;
 })();

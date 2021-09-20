@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const db = mysql.createConnection(require('./config').mysql);
+const fs = require('fs');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -9,6 +10,9 @@ app.use(express.static('public'));
 app.use(express.json());
 
 app.get('/', (req, res) => {
+    const data = fs.readFileSync('views.txt').toString();
+    fs.writeFileSync('views.txt', `${parseInt(data) + 1}`);
+
     res.render('index.ejs');
 });
 
@@ -30,6 +34,12 @@ app.get('/select/', (req, res) => {
 
         res.json(results);
     })
+});
+
+app.get('/getviews/', (req, res) => {
+    const data = fs.readFileSync('views.txt').toString();
+
+    res.json({views: data});
 });
 
 app.listen(5000, () => {
